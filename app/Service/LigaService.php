@@ -19,13 +19,16 @@ class LigaService
     $this->pertandinganRepository = $pertandinganRepository;
 
     // cari semua daftar team beserta semua pertandingan mereka
-    $daftarTim = $this->timRepository->getAll();
-    foreach ($daftarTim as $team) {
-      $team->daftarPertandingan = $this->pertandinganRepository->getPertandinganByTimId($team->getId());
+    $this->daftarTim = $this->timRepository->getAll();
+    foreach ($this->daftarTim as $team) {
+      $team->daftarPertandingan = $this->pertandinganRepository->getPertandinganByTimId($team->id);
     }
 
+    // echo '<h1>sebelum sorting</h1><br>';
+    // echo var_dump($daftarTim);
+
     // Pengurutan
-    usort($this->daftar, function ($a, $b) {
+    usort($this->daftarTim, function ($a, $b) {
 
       // berdasarkan jumlah total poin
       $poinA = $a->getTotalPoin();

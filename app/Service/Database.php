@@ -26,7 +26,7 @@ class Database
   public static function exec(string $sql, array $params = [])
   {
     $stmt = self::getConnection()->prepare($sql);
-    $stmt->exec($params);
+    $stmt->execute($params);
     return $stmt;
   }
 

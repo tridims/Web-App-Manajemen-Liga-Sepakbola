@@ -11,8 +11,8 @@ class HomeController
     View::render('Home', []);
   }
 
-  function testing()
+  function testing($nama)
   {
-    View::render('Testing', ['nama' => 'Tridi']);
+    View::render('Testing', ['nama' => $nama]);
   }
 }

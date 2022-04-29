@@ -27,16 +27,16 @@ class TimService
       Database::beginTransaction();
 
       // cek apakah tim sudah terdaftar
-      $tim = $this->timRepository->findById($request->id);
-      if ($tim != null) {
-        throw new \Exception("Tim sudah terdaftar");
-      }
+      // $tim = $this->timRepository->findById($request->id);
+      // if ($tim != null) {
+      //   throw new \Exception("Tim sudah terdaftar");
+      // }
 
-      $tim = new TimSepakBola($request->id, $request->namaTim, $request->deskripsi, $request->asal, $request->logo, $request->stadium, $request->pelatih, $request->pemilik);
-      $this->timRepository->saveTim($tim);
+      // $tim = new TimSepakBola($request->id, $request->namaTim, $request->deskripsi, $request->asal, $request->logo, $request->stadium, $request->pelatih, $request->pemilik);
+      $this->timRepository->saveTim($request);
 
       Database::commitTransaction();
-      return new TimResponse($tim);
+      // return new TimResponse($tim);
     } catch (\Exception $e) {
       Database::rollbackTransaction();
       throw $e;
@@ -76,7 +76,8 @@ class TimService
       if ($tim == null) {
         throw new \Exception("Tim tidak terdaftar");
       }
-      $this->timRepository->deleteTim($tim);
+
+      $this->timRepository->deleteTim($request);
 
       Database::commitTransaction();
       return new TimResponse($tim);

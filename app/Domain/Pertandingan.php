@@ -6,15 +6,16 @@ use DateTime;
 
 class Pertandingan
 {
-  public int $id;
+  public ?int $id;
   public TimSepakBola $tim1;
   public TimSepakBola $tim2;
   public string $jadwalMain;
   public int $jumlahGolTim1;
   public int $jumlahGolTim2;
 
-  public function __construct(int $id, TimSepakBola $tim1, TimSepakBola $tim2, string $jadwalMain, int $jumlahGolTim1, int $jumlahGolTim2)
+  public function __construct(?int $id, TimSepakBola $tim1, TimSepakBola $tim2, string $jadwalMain, int $jumlahGolTim1, int $jumlahGolTim2)
   {
+    $this->id = $id;
     $this->tim1 = $tim1;
     $this->tim2 = $tim2;
     $this->jadwalMain = $jadwalMain;
@@ -46,9 +47,9 @@ class Pertandingan
   public function getScoreForTim(int $timId)
   {
     if ($timId == $this->tim1->id) {
-      return $this->getScoreTim1;
+      return $this->getScoreTim1();
     } else if ($timId == $this->tim2->id) {
-      return $this->getScoreTim2;
+      return $this->getScoreTim2();
     } else {
       return 0;
     }

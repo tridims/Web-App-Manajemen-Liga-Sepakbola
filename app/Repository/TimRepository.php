@@ -3,6 +3,8 @@
 namespace Tridi\ManajemenLiga\Repository;
 
 use Tridi\ManajemenLiga\Domain\TimSepakBola;
+use Tridi\ManajemenLiga\Model\Tim\createTimRequest;
+use Tridi\ManajemenLiga\Model\Tim\deleteTimRequest;
 use Tridi\ManajemenLiga\Service\Database;
 
 class TimRepository
@@ -13,7 +15,7 @@ class TimRepository
     $stmt = Database::query($sql);
     $listTim = [];
     while ($row = $stmt->fetch()) {
-      $tim = new TimSepakBola($row['id'], $row['nama_tim'], $row['deskripsi'], $row['asal'], $row['logo'], $row['stadium'], $row['pelatih'], $row['pemilik']);
+      $tim = new TimSepakBola($row['id'], $row['nama'], $row['deskripsi'], $row['asal'], $row['logo'], $row['stadium'], $row['pelatih'], $row['pemilik']);
       $listTim[] = $tim;
     }
     return $listTim;
@@ -24,15 +26,15 @@ class TimRepository
     $sql = "SELECT * FROM tim WHERE id = :id";
     $stmt = Database::query($sql, ['id' => $id]);
     $data = $stmt->fetch();
-    $tim = new TimSepakBola($data['id'], $data['nama_tim'], $data['deskripsi'], $data['asal'], $data['logo'], $data['stadium'], $data['pelatih'], $data['pemilik']);
+    $tim = new TimSepakBola($data['id'], $data['nama'], $data['deskripsi'], $data['asal'], $data['logo'], $data['stadium'], $data['pelatih'], $data['pemilik']);
     return $tim;
   }
 
-  public function saveTim(TimSepakBola $tim)
+  public function saveTim(createTimRequest $tim)
   {
-    $sql = "INSERT INTO tim (nama_tim, deskripsi, asal, logo, stadium, pelatih, pemilik) VALUES (:nama_tim, :deskripsi, :asal, :logo, :stadium, :pelatih, :pemilik)";
+    $sql = "INSERT INTO tim (nama, deskripsi, asal, logo, stadium, pelatih, pemilik) VALUES (:nama, :deskripsi, :asal, :logo, :stadium, :pelatih, :pemilik)";
     $stmt = Database::exec($sql, [
-      'nama_tim' => $tim->namaTim,
+      'nama' => $tim->namaTim,
       'deskripsi' => $tim->deskripsi,
       'asal' => $tim->asal,
       'logo' => $tim->logo,
@@ -44,9 +46,9 @@ class TimRepository
 
   public function updateTim(TimSepakBola $tim)
   {
-    $sql = "UPDATE tim SET nama_tim = :nama_tim, deskripsi = :deskripsi, asal = :asal, logo = :logo, stadium = :stadium, pelatih = :pelatih, pemilik = :pemilik WHERE id = :id";
+    $sql = "UPDATE tim SET nama = :nama, deskripsi = :deskripsi, asal = :asal, logo = :logo, stadium = :stadium, pelatih = :pelatih, pemilik = :pemilik WHERE id = :id";
     $stmt = Database::exec($sql, [
-      'nama_tim' => $tim->namaTim,
+      'nama' => $tim->namaTim,
       'deskripsi' => $tim->deskripsi,
       'asal' => $tim->asal,
       'logo' => $tim->logo,
@@ -57,7 +59,7 @@ class TimRepository
     ]);
   }
 
-  public function deleteTim(TimSepakBola $tim)
+  public function deleteTim(deleteTimRequest $tim)
   {
     $sql = "DELETE FROM tim WHERE id = :id";
     $stmt = Database::exec($sql, ['id' => $tim->id]);

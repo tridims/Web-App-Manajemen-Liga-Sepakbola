@@ -4,10 +4,16 @@ namespace Tridi\ManajemenLiga\App;
 
 class Router
 {
-    private static $routes = [];
 
-    public static function add(string $method, string $path, string $controller, string $function, array $middlewares = [])
-    {
+    private static array $routes = [];
+
+    public static function add(
+        string $method,
+        string $path,
+        string $controller,
+        string $function,
+        array  $middlewares = []
+    ): void {
         self::$routes[] = [
             'method' => $method,
             'path' => $path,
@@ -17,7 +23,7 @@ class Router
         ];
     }
 
-    public static function run()
+    public static function run(): void
     {
         $path = '/';
         if (isset($_SERVER['PATH_INFO'])) {
@@ -41,6 +47,12 @@ class Router
                 // $controller->$function();
 
                 array_shift($variables);
+
+                // check if there is $_GET
+                if (isset($_GET)) {
+                    $variables = array_merge($variables, $_GET);
+                }
+
                 call_user_func_array([$controller, $function], $variables);
 
                 return;
@@ -48,6 +60,6 @@ class Router
         }
 
         http_response_code(404);
-        echo '<h1>404 Not Found</h1>';
+        echo 'CONTROLLER NOT FOUND';
     }
 }
