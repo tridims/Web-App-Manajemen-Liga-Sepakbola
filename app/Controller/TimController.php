@@ -39,7 +39,7 @@ class TimController
   public function postEditTim($id)
   {
     // echo ' ' . var_dump($_FILES['logo']);
-    if (is_null($_FILES)) {
+    if (is_uploaded_file($_FILES['logo']['tmp_name'])) {
       $logo = file_get_contents($_FILES['logo']['tmp_name']);
     } else {
       $logo = null;
@@ -60,7 +60,6 @@ class TimController
     header('Location: /tim');
   }
 
-  // TODO : cek ini fungsi
   public function deleteTim($id)
   {
     $deleteRequest = new deleteTimRequest($id);
@@ -77,7 +76,7 @@ class TimController
   public function postTambahTim()
   {
     if (isset($_FILES)) {
-      $logo = file_get_contents($_FILES['images']['tmp_name']);
+      $logo = file_get_contents($_FILES['logo']['tmp_name']);
     } else {
       $logo = null;
     }
@@ -91,6 +90,9 @@ class TimController
       $_POST['pelatih'],
       $_POST['pemilik']
     );
+
+    // echo var_dump($logo);
+
     $tim = $this->timService->registerTim($createRequest);
     // $this->daftarTim();
     header('Location: /tim');

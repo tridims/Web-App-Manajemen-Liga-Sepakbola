@@ -18,24 +18,28 @@
     </thead>
     <tbody>
       <?php
+      $n = 1;
       // untuk nampilkan isi dari database tabel tim sepak bola
       foreach ($model['daftarTim'] as $tim) {
       ?>
         <tr>
+          <!-- <th scope="row">
+          </th> -->
           <th scope="row">
-            <?php echo $tim->id ?>
+
+            <?= $n++ ?>
           </th>
           <td>
-            <?php echo $tim->namaTim ?>
+            <?= $tim->namaTim ?>
           </td>
           <td>
-            <?php echo $tim->deskripsi ?>
+            <?= $tim->deskripsi ?>
           </td>
           <td>
-            <?php echo $tim->asal ?>
+            <?= $tim->asal ?>
           </td>
           <td>
-            <?php echo $tim->stadium ?>
+            <?= $tim->stadium ?>
           </td>
           <td>
             <!-- ini untuk nampilkan logo -->
@@ -44,10 +48,10 @@
             ?>
           </td>
           <td>
-            <?php echo $tim->pelatih ?>
+            <?= $tim->pelatih ?>
           </td>
           <td>
-            <?php echo $tim->pemilik ?>
+            <?= $tim->pemilik ?>
           </td>
           <!-- edit -->
           <td>

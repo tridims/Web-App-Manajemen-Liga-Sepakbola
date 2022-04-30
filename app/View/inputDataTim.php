@@ -1,7 +1,7 @@
 <div class="container px-5 py-5">
 
     <h2 class="row justify-content-center">Tambah Tim</h2>
-    <form action="/tim/create" method="POST">
+    <form action="/tim/create" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
             <label class="form-label">Nama Tim</label>
             <input type="text" class="form-control" name="namaTim" size="20" />
@@ -24,7 +24,7 @@
 
         <div class="mb-3">
             <label class="form-label">Logo</label>
-            <input type="file" class="form-control" name="logo" />
+            <input type="file" class="form-control" name="logo" id="logo" />
         </div>
 
         <div class="mb-3">

@@ -7,8 +7,8 @@
   <table class="table mt-5">
     <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">Nama Tim</th>
+        <th scope="col">Rank</th>
+        <th scope="col">Tim</th>
         <th scope="col">Skor</th>
       </tr>
     </thead>
@@ -24,7 +24,9 @@
           echo $n ?>
         </th>
         <td>
-          <?= $n != 1 ? $klasemen->namaTim : $klasemen->namaTim . ' (Current Winner)' ?>
+          <?php
+          echo '<img src="data:image/png;base64,' . base64_encode($klasemen->logo) . '" class="img-fluid rounded" width="50" />';
+          ?>&nbsp;&nbsp;<?= $n != 1 ? $klasemen->namaTim : $klasemen->namaTim . ' (Current Winner)' ?>
         </td>
         <td>
           <?php echo $klasemen->getTotalPoin() ?>

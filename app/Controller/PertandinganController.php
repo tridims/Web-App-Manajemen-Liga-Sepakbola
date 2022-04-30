@@ -62,7 +62,7 @@ class PertandinganController
   public function postTambahPertandingan()
   {
     $createRequest = new createPertandinganRequest(
-      $_POST['tim1'], // TODO : buat dropdown ?
+      $_POST['tim1'],
       $_POST['tim2'],
       $_POST['jadwalPertandingan'],
       $_POST['jumlahGolTim1'],
