@@ -29,7 +29,7 @@
           ?>&nbsp;&nbsp;<?= $n != 1 ? $klasemen->namaTim : $klasemen->namaTim . ' (Current Winner)' ?>
         </td>
         <td>
-          <?php echo $klasemen->getTotalPoin() ?>
+          <?php echo $klasemen->getTotalPoin() / 2 ?>
         </td>
         </tr>
       <?php } ?>
