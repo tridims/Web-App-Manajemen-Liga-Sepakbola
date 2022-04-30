@@ -55,7 +55,7 @@
   </div>
   <div class="col">
     <div class="card">
-      <a href="/tim" style="text-decoration: none; color:black;">
+      <a href="/pertandingan" style="text-decoration: none; color:black;">
         <div class="card-body">
           <h5 class="card-title">Daftar Pertandingan</h5>
           <p class="card-text">Manage match schedule in this league.</p>
@@ -65,7 +65,7 @@
   </div>
   <div class="col">
     <div class="card">
-      <a href="/tim" style="text-decoration: none; color:black;">
+      <a href="/klasemen" style="text-decoration: none; color:black;">
         <div class="card-body">
           <h5 class="card-title">Ranking Klasemen Terbaru</h5>
           <p class="card-text">see the latest standings.</p>
