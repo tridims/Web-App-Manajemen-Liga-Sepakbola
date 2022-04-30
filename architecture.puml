@@ -2,7 +2,7 @@
 
      actor "User" as user
 
-     node "Management Liga Sepakbola" {
+     node "Managemen Liga Sepakbola" {
         node "Model" as model
         node "Domain" as domain
         node "Controller" as controller
