@@ -2,7 +2,7 @@
 
      actor "User" as user
 
-     node "PHP Login Management" {
+     node "Management Liga Sepakbola" {
         node "Model" as model
         node "Domain" as domain
         node "Controller" as controller
