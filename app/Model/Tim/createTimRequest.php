@@ -7,7 +7,7 @@ class createTimRequest
     public String $namaTim;
     public String $deskripsi;
     public String $asal;
-    public String $logo;
+    public ?String $logo;
     public String $stadium;
     public String $pelatih;
     public String $pemilik;
@@ -16,7 +16,7 @@ class createTimRequest
         String $namaTim,
         String $deskripsi,
         String $asal,
-        String $logo,
+        ?String $logo = null,
         String $stadium,
         String $pelatih,
         String $pemilik

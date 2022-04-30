@@ -56,7 +56,7 @@ class TimService
 
       // buat objek tim baru dari request
       $tim = new TimSepakBola($request->id, $request->namaTim, $request->deskripsi, $request->asal, $request->logo, $request->stadium, $request->pelatih, $request->pemilik);
-      $this->timRepository->updateTim($tim);
+      $this->timRepository->updateTim($request);
 
       Database::commitTransaction();
       return new TimResponse($tim);

@@ -5,6 +5,7 @@ namespace Tridi\ManajemenLiga\Repository;
 use Tridi\ManajemenLiga\Domain\TimSepakBola;
 use Tridi\ManajemenLiga\Model\Tim\createTimRequest;
 use Tridi\ManajemenLiga\Model\Tim\deleteTimRequest;
+use Tridi\ManajemenLiga\Model\Tim\updateTimRequest;
 use Tridi\ManajemenLiga\Service\Database;
 
 class TimRepository
@@ -44,19 +45,44 @@ class TimRepository
     ]);
   }
 
-  public function updateTim(TimSepakBola $tim)
+  public function updateTim(updateTimRequest $tim)
   {
-    $sql = "UPDATE tim SET nama = :nama, deskripsi = :deskripsi, asal = :asal, logo = :logo, stadium = :stadium, pelatih = :pelatih, pemilik = :pemilik WHERE id = :id";
-    $stmt = Database::exec($sql, [
-      'nama' => $tim->namaTim,
-      'deskripsi' => $tim->deskripsi,
-      'asal' => $tim->asal,
-      'logo' => $tim->logo,
-      'stadium' => $tim->stadium,
-      'pelatih' => $tim->pelatih,
-      'pemilik' => $tim->pemilik,
-      'id' => $tim->id
-    ]);
+    // check if logo is null
+    if ($tim->logo == null) {
+      $sql = "UPDATE tim SET nama = :nama, deskripsi = :deskripsi, asal = :asal, stadium = :stadium, pelatih = :pelatih, pemilik = :pemilik WHERE id = :id";
+      $stmt = Database::exec($sql, [
+        'nama' => $tim->namaTim,
+        'deskripsi' => $tim->deskripsi,
+        'asal' => $tim->asal,
+        'stadium' => $tim->stadium,
+        'pelatih' => $tim->pelatih,
+        'pemilik' => $tim->pemilik,
+        'id' => $tim->id
+      ]);
+    } else {
+      $sql = "UPDATE tim SET nama = :nama, deskripsi = :deskripsi, asal = :asal, logo = :logo, stadium = :stadium, pelatih = :pelatih, pemilik = :pemilik WHERE id = :id";
+      $stmt = Database::exec($sql, [
+        'nama' => $tim->namaTim,
+        'deskripsi' => $tim->deskripsi,
+        'asal' => $tim->asal,
+        'logo' => $tim->logo,
+        'stadium' => $tim->stadium,
+        'pelatih' => $tim->pelatih,
+        'pemilik' => $tim->pemilik,
+        'id' => $tim->id
+      ]);
+    }
+    // $sql = "UPDATE tim SET nama = :nama, deskripsi = :deskripsi, asal = :asal, logo = :logo, stadium = :stadium, pelatih = :pelatih, pemilik = :pemilik WHERE id = :id";
+    // $stmt = Database::exec($sql, [
+    //   'nama' => $tim->namaTim,
+    //   'deskripsi' => $tim->deskripsi,
+    //   'asal' => $tim->asal,
+    //   'logo' => $tim->logo,
+    //   'stadium' => $tim->stadium,
+    //   'pelatih' => $tim->pelatih,
+    //   'pemilik' => $tim->pemilik,
+    //   'id' => $tim->id
+    // ]);
   }
 
   public function deleteTim(deleteTimRequest $tim)

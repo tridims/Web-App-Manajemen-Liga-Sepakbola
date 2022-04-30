@@ -38,12 +38,19 @@ class TimController
 
   public function postEditTim($id)
   {
+    // echo ' ' . var_dump($_FILES['logo']);
+    if (is_null($_FILES)) {
+      $logo = file_get_contents($_FILES['logo']['tmp_name']);
+    } else {
+      $logo = null;
+    }
+    // echo ' ' . var_dump($logo);
     $updateRequest = new updateTimRequest(
       $id,
       $_POST['namaTim'],
       $_POST['deskripsi'],
       $_POST['asal'],
-      $_POST['logo'],
+      $logo,
       $_POST['stadium'],
       $_POST['pelatih'],
       $_POST['pemilik']
@@ -69,11 +76,17 @@ class TimController
 
   public function postTambahTim()
   {
+    if (isset($_FILES)) {
+      $logo = file_get_contents($_FILES['images']['tmp_name']);
+    } else {
+      $logo = null;
+    }
+
     $createRequest = new createTimRequest(
       $_POST['namaTim'],
       $_POST['deskripsi'],
       $_POST['asal'],
-      $_POST['logo'],
+      $logo,
       $_POST['stadium'],
       $_POST['pelatih'],
       $_POST['pemilik']

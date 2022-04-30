@@ -1,38 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daftar Pertandingan</title>
-  <link rel="stylesheet" href="homeStyle.css">
-</head>
-
-<body>
-  <!-- Kode yang menampilkan nama - nama kolom sesuai dengan database -->
+<div class="container px-4 py-5">
   <h2>Daftar Pertandingan Sepak Bola</h2>
-  <table border="1" cellpadding="7">
-    <tbody>
-      <tr></tr>
-      <th>No</th>
-      <th>Tim Home</th>
-      <th>Tim Away</th>
-      <th>Jadwal Pertandingan</th>
-      <th>Jumlah Gol Tim Home</th>
-      <th>Jumlah Gol Tim Away</th>
-      <th colspan="2">Action</th>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Tim Home</th>
+        <th scope="col">Tim Away</th>
+        <th scope="col">Jadwal Pertandingan</th>
+        <th scope="col">Jumlah Gol Tim Home</th>
+        <th scope="col">Jumlah Gol Tim Away</th>
+        <th scope="col" colspan="2">Action</th>
       </tr>
+    </thead>
+
     </tbody>
     <?php
-    // untuk menampilkan isi dari database
-    // while ($pertandingan = mysqli_fetch_array($pert)) {
-    foreach ($model['daftarPertandingan'] as $pertandingan) {
-    ?>
+    $n = 1;
+    foreach ($model['daftarPertandingan'] as $pertandingan) { ?>
       <tr>
-        <td>
-          <?php echo $pertandingan->id ?>
-        </td>
+        <th scope="row">
+          <?php echo $n ?>
+        </th>
         <td>
           <?php echo $pertandingan->tim1->namaTim ?>
         </td>
@@ -50,29 +38,20 @@
         </td>
 
         <td>
-          <a href="/pertandingan/edit?id=<?= $pertandingan->id; ?>">Edit</a>
+          <a class="btn btn-primary" role="button" href="/pertandingan/edit?id=<?= $pertandingan->id; ?>">Edit</a>
         </td>
 
         <td>
-          <a href="/pertandingan/hapus?id=<?= $pertandingan->id; ?>">Hapus</a>
+          <a class="btn btn-danger" role="button" href="/pertandingan/hapus?id=<?= $pertandingan->id; ?>">Hapus</a>
         </td>
       </tr>
-    <?php } ?>
+    <?php $n++;
+    } ?>
+    </tbody>
   </table>
   <br>
 
-  <!-- 
-  tombol untuk input data jadwal pertandingan -->
-  <a href="/pertandingan/create">Input Jadwal Pertandingan</a>
-  <!-- <form action="/pertandingan/create" method="get">
-    <input type="submit" value="Input Jadwal Pertandingan" name="viewInputJadwalPertandingan">
-  </form> -->
-  <br>
-  <!-- tombol untuk kembali kehalaman home -->
-  <a href="/">Kembali</a>
-  <!-- <form action="/" method="get">
-    <input type="submit" value="Kembali" name="kembaliKeHome">
-  </form> -->
-</body>
+  <a class="btn btn-primary" role="button" href="/pertandingan/create">Input Jadwal Pertandingan</a>
+  <a class="btn btn-warning" role="button" href="/">Kembali</a>
 
-</html>
+</div>

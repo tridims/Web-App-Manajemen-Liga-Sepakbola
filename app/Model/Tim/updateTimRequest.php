@@ -8,7 +8,7 @@ class updateTimRequest
     public String $namaTim;
     public String $deskripsi;
     public String $asal;
-    public String $logo;
+    public ?String $logo;
     public String $stadium;
     public String $pelatih;
     public String $pemilik;
@@ -19,7 +19,7 @@ class updateTimRequest
         String $namaTim,
         String $deskripsi,
         String $asal,
-        String $logo,
+        ?String $logo = null,
         String $stadium,
         String $pelatih,
         String $pemilik
