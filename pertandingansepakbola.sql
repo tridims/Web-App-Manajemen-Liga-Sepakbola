@@ -64,7 +64,7 @@ CREATE TABLE `tim` (
   `asal` varchar(25) NOT NULL,
   `deskripsi` varchar(256) NOT NULL,
   `stadium` varchar(25) NOT NULL,
-  `logo` blob NOT NULL,
+  `logo` blob NULL,
   `pelatih` varchar(30) NOT NULL,
   `pemilik` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

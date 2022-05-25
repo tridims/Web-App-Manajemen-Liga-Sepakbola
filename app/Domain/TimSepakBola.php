@@ -4,7 +4,7 @@ namespace Tridi\ManajemenLiga\Domain;
 
 class TimSepakBola
 {
-  public int $id;
+  public ?int $id;
   public String $namaTim;
   public String $deskripsi;
   public String $asal;
@@ -12,9 +12,9 @@ class TimSepakBola
   public String $stadium;
   public String $pelatih;
   public String $pemilik;
-  public array $daftarPertandingan;
+  public ?array $daftarPertandingan;
 
-  public function __construct(int $id, String $namaTim, String $deskripsi, String $asal, String $logo = null, String $stadium, String $pelatih, String $pemilik)
+  public function __construct(?int $id, String $namaTim, String $deskripsi, String $asal, ?String $logo = null, String $stadium, String $pelatih, String $pemilik)
   {
     $this->id = $id;
     $this->namaTim = $namaTim;

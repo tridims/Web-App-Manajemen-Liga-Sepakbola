@@ -10,7 +10,7 @@ use Tridi\ManajemenLiga\Service\Database;
 
 class TimRepository
 {
-  public function getAll()
+  public function getAll(): array
   {
     $sql = "SELECT * FROM tim";
     $stmt = Database::query($sql);
@@ -22,19 +22,24 @@ class TimRepository
     return $listTim;
   }
 
-  public function findById($id)
+  public function findById($id): TimSepakBola
   {
     $sql = "SELECT * FROM tim WHERE id = :id";
     $stmt = Database::query($sql, ['id' => $id]);
     $data = $stmt->fetch();
-    $tim = new TimSepakBola($data['id'], $data['nama'], $data['deskripsi'], $data['asal'], $data['logo'], $data['stadium'], $data['pelatih'], $data['pemilik']);
-    return $tim;
+
+    if ($data) {
+      $tim = new TimSepakBola($data['id'], $data['nama'], $data['deskripsi'], $data['asal'], $data['logo'], $data['stadium'], $data['pelatih'], $data['pemilik']);
+      return $tim;
+    } else {
+      throw new \Exception("Tim tidak ditemukan");
+    }
   }
 
-  public function saveTim(createTimRequest $tim)
+
+  public function saveTim(TimSepakBola $tim): void
   {
-    $sql = "INSERT INTO tim (nama, deskripsi, asal, logo, stadium, pelatih, pemilik) VALUES (:nama, :deskripsi, :asal, :logo, :stadium, :pelatih, :pemilik)";
-    $stmt = Database::exec($sql, [
+    $params = [
       'nama' => $tim->namaTim,
       'deskripsi' => $tim->deskripsi,
       'asal' => $tim->asal,
@@ -42,52 +47,46 @@ class TimRepository
       'stadium' => $tim->stadium,
       'pelatih' => $tim->pelatih,
       'pemilik' => $tim->pemilik
-    ]);
+    ];
+
+    if ($tim->logo != null) {
+      $sql = "INSERT INTO tim (nama, deskripsi, asal, logo, stadium, pelatih, pemilik) VALUES (:nama, :deskripsi, :asal, :logo, :stadium, :pelatih, :pemilik)";
+    } else {
+      $sql = "INSERT INTO tim (nama, deskripsi, asal, stadium, pelatih, pemilik) VALUES (:nama, :deskripsi, :asal, :stadium, :pelatih, :pemilik)";
+
+      unset($params['logo']);
+    }
+
+    Database::exec($sql, $params);
   }
 
-  public function updateTim(updateTimRequest $tim)
+  public function updateTim(TimSepakBola $tim): void
   {
+    $params = [
+      'nama' => $tim->namaTim,
+      'deskripsi' => $tim->deskripsi,
+      'asal' => $tim->asal,
+      'logo' => $tim->logo,
+      'stadium' => $tim->stadium,
+      'pelatih' => $tim->pelatih,
+      'pemilik' => $tim->pemilik,
+      'id' => $tim->id
+    ];
+
     // check if logo is null
     if ($tim->logo == null) {
       $sql = "UPDATE tim SET nama = :nama, deskripsi = :deskripsi, asal = :asal, stadium = :stadium, pelatih = :pelatih, pemilik = :pemilik WHERE id = :id";
-      $stmt = Database::exec($sql, [
-        'nama' => $tim->namaTim,
-        'deskripsi' => $tim->deskripsi,
-        'asal' => $tim->asal,
-        'stadium' => $tim->stadium,
-        'pelatih' => $tim->pelatih,
-        'pemilik' => $tim->pemilik,
-        'id' => $tim->id
-      ]);
+      unset($params['logo']);
     } else {
       $sql = "UPDATE tim SET nama = :nama, deskripsi = :deskripsi, asal = :asal, logo = :logo, stadium = :stadium, pelatih = :pelatih, pemilik = :pemilik WHERE id = :id";
-      $stmt = Database::exec($sql, [
-        'nama' => $tim->namaTim,
-        'deskripsi' => $tim->deskripsi,
-        'asal' => $tim->asal,
-        'logo' => $tim->logo,
-        'stadium' => $tim->stadium,
-        'pelatih' => $tim->pelatih,
-        'pemilik' => $tim->pemilik,
-        'id' => $tim->id
-      ]);
     }
-    // $sql = "UPDATE tim SET nama = :nama, deskripsi = :deskripsi, asal = :asal, logo = :logo, stadium = :stadium, pelatih = :pelatih, pemilik = :pemilik WHERE id = :id";
-    // $stmt = Database::exec($sql, [
-    //   'nama' => $tim->namaTim,
-    //   'deskripsi' => $tim->deskripsi,
-    //   'asal' => $tim->asal,
-    //   'logo' => $tim->logo,
-    //   'stadium' => $tim->stadium,
-    //   'pelatih' => $tim->pelatih,
-    //   'pemilik' => $tim->pemilik,
-    //   'id' => $tim->id
-    // ]);
+
+    Database::exec($sql, $params);
   }
 
-  public function deleteTim(deleteTimRequest $tim)
+  public function deleteTim(int $id): void
   {
     $sql = "DELETE FROM tim WHERE id = :id";
-    $stmt = Database::exec($sql, ['id' => $tim->id]);
+    Database::exec($sql, ['id' => $id]);
   }
 }
