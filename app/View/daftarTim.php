@@ -30,7 +30,7 @@
             <?= $n++ ?>
           </th>
           <td>
-            <?= $tim->namaTim ?>
+            <?= $tim->namaTim ?> (<?= $tim->id ?>)
           </td>
           <td>
             <?= $tim->deskripsi ?>
@@ -57,7 +57,7 @@
           <td>
             <a class="btn btn-primary" role="button" href="/tim/edit?id=<?= $tim->id; ?>">Edit</a>
           </td>
-          <!-- nanti pas ditampilkan, akan mengirimkan parameter yang berisi id dari yang dipilih ke index. 
+          <!-- nanti pas ditampilkan, akan mengirimkan parameter yang berisi id dari yang dipilih ke index.
         Idnya nanti bisa digunakan untuk sql delete -->
           <td>
             <a class="btn btn-danger" role="button" href="/tim/hapus?id=<?= $tim->id; ?>">Hapus</a>
