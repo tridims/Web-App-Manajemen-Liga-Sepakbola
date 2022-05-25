@@ -7,7 +7,6 @@ use Tridi\ManajemenLiga\Repository\PertandinganRepository;
 
 class LigaService
 {
-  // private array $daftar = [];
   private array $daftarTim = [];
   private TimRepository $timRepository;
   private PertandinganRepository $pertandinganRepository;
@@ -23,9 +22,6 @@ class LigaService
     foreach ($this->daftarTim as $team) {
       $team->daftarPertandingan = $this->pertandinganRepository->getPertandinganByTimId($team->id);
     }
-
-    // echo '<h1>sebelum sorting</h1><br>';
-    // echo var_dump($daftarTim);
 
     // Pengurutan
     usort($this->daftarTim, function ($a, $b) {
