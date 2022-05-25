@@ -12,78 +12,85 @@ use Tridi\ManajemenLiga\Repository\TimRepository;
 
 class TimService
 {
-  private TimRepository $timRepository;
-  private PertandinganRepository $pertandinganRepository;
+    private TimRepository $timRepository;
 
-  public function __construct(TimRepository $timRepository, PertandinganRepository $pertandinganRepository)
-  {
-    $this->timRepository = $timRepository;
-    $this->pertandinganRepository = $pertandinganRepository;
-  }
-
-  public function registerTim(createTimRequest $request)
-  {
-    try {
-      Database::beginTransaction();
-
-      // cek apakah tim sudah terdaftar
-      // $tim = $this->timRepository->findById($request->id);
-      // if ($tim != null) {
-      //   throw new \Exception("Tim sudah terdaftar");
-      // }
-
-      // $tim = new TimSepakBola($request->id, $request->namaTim, $request->deskripsi, $request->asal, $request->logo, $request->stadium, $request->pelatih, $request->pemilik);
-      $this->timRepository->saveTim($request);
-
-      Database::commitTransaction();
-      // return new TimResponse($tim);
-    } catch (\Exception $e) {
-      Database::rollbackTransaction();
-      throw $e;
+    public function __construct(TimRepository $timRepository)
+    {
+        $this->timRepository = $timRepository;
     }
-  }
 
-  public function updateTim(updateTimRequest $request)
-  {
-    try {
-      Database::beginTransaction();
-
-      // cek apakah tim sudah terdaftar
-      $tim = $this->timRepository->findById($request->id);
-      if ($tim == null) {
-        throw new \Exception("Tim tidak terdaftar");
-      }
-
-      // buat objek tim baru dari request
-      $tim = new TimSepakBola($request->id, $request->namaTim, $request->deskripsi, $request->asal, $request->logo, $request->stadium, $request->pelatih, $request->pemilik);
-      $this->timRepository->updateTim($request);
-
-      Database::commitTransaction();
-      return new TimResponse($tim);
-    } catch (\Exception $e) {
-      Database::rollbackTransaction();
-      throw $e;
+    public function getTimRepository(): TimRepository
+    {
+        return $this->timRepository;
     }
-  }
 
-  public function deleteTim(deleteTimRequest $request)
-  {
-    try {
-      Database::beginTransaction();
+    public function registerTim(createTimRequest $request): void
+    {
+        try {
+            Database::beginTransaction();
 
-      // cek apakah tim sudah terdaftar
-      $tim = $this->timRepository->findById($request->id);
-      if ($tim == null) {
-        throw new \Exception("Tim tidak terdaftar");
-      }
+            $tim = new TimSepakBola(
+                null,
+                $request->namaTim,
+                $request->deskripsi,
+                $request->asal,
+                $request->logo,
+                $request->stadium,
+                $request->pelatih,
+                $request->pemilik
+            );
 
-      $this->timRepository->deleteTim($request);
+            $this->timRepository->saveTim($tim);
 
-      Database::commitTransaction();
-      return new TimResponse($tim);
-    } catch (\Exception $e) {
-      Database::rollbackTransaction();
-      throw $e;
+            Database::commitTransaction();
+        } catch (\Exception $e) {
+            Database::rollbackTransaction();
+            throw $e;
+        }
     }
-  }
+
+    public function updateTim(updateTimRequest $request): TimResponse
+    {
+        try {
+            Database::beginTransaction();
+
+            // cek apakah tim sudah terdaftar
+            $tim = $this->timRepository->findById($request->id);
+            if ($tim == null) {
+                throw new \Exception("Tim tidak terdaftar");
+            }
+
+            // buat objek tim baru dari request
+            $tim = new TimSepakBola($request->id, $request->namaTim, $request->deskripsi, $request->asal, $request->logo, $request->stadium, $request->pelatih, $request->pemilik);
+
+            $this->timRepository->updateTim($tim);
+
+            Database::commitTransaction();
+            return new TimResponse($tim);
+        } catch (\Exception $e) {
+            Database::rollbackTransaction();
+            throw $e;
+        }
+    }
+
+    public function deleteTim(deleteTimRequest $request)
+    {
+        try {
+            Database::beginTransaction();
+
+            // cek apakah tim sudah terdaftar
+            $tim = $this->timRepository->findById($request->id);
+            if ($tim == null) {
+                throw new \Exception("Tim tidak terdaftar");
+            }
+
+            $this->timRepository->deleteTim($tim->id);
+
+            Database::commitTransaction();
+            return new TimResponse($tim);
+        } catch (\Exception $e) {
+            Database::rollbackTransaction();
+            throw $e;
+        }
+    }
 }

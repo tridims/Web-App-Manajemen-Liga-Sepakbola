@@ -23,39 +23,45 @@ class LigaService
       $team->daftarPertandingan = $this->pertandinganRepository->getPertandinganByTimId($team->id);
     }
 
-    // Pengurutan
-    usort($this->daftarTim, function ($a, $b) {
+    $this->daftarTim = $this::urutkanTim($this->daftarTim);
+  }
 
-      // berdasarkan jumlah total poin
-      $poinA = $a->getTotalPoin();
-      $poinB = $b->getTotalPoin();
+  public static function urutkanTim(array $daftarTim): array
+  {
+      usort($daftarTim, function ($a, $b) {
 
-      if ($poinA != $poinB) {
-        return $poinB - $poinA;
-      }
+          // berdasarkan jumlah total poin
+          $poinA = $a->getTotalPoint();
+          $poinB = $b->getTotalPoint();
 
-      // berdasarkan jumlah poin yang didapat klub terkait
-      $poinA = $a->getPoinWhenTandingWith($b);
-      $poinB = $b->getPoinWhenTandingWith($a);
+          if ($poinA != $poinB) {
+              return $poinB - $poinA;
+          }
 
-      if ($poinA != $poinB) {
-        return $poinB - $poinA;
-      }
+          // berdasarkan jumlah poin yang didapat klub terkait
+          $poinA = $a->getPointWithOpponent($b);
+          $poinB = $b->getPointWithOpponent($a);
 
-      // berdasarkan selisih gol tertinggi -> selisih gol ?
-      $poinA = $a->getTotalSelisihGolWhenTandingWith($b);
-      $poinB = $b->getTotalSelisihGolWhenTandingWith($a);
+          if ($poinA != $poinB) {
+              return $poinB - $poinA;
+          }
 
-      if ($poinA != $poinB) {
-        return $poinB - $poinA;
-      }
+          // berdasarkan selisih gol tertinggi -> selisih gol ?
+          $poinA = $a->getGoalDifferenceWithOpponent($b);
+          $poinB = $b->getGoalDifferenceWithOpponent($a);
 
-      // berdasarkan jumlah gol
-      $poinA = $a->getTotalGolWhenTandingWith($b);
-      $poinB = $b->getTotalGolWhenTandingWith($a);
+          if ($poinA != $poinB) {
+              return $poinB - $poinA;
+          }
 
-      return $poinB - $poinA;
-    });
+          // berdasarkan jumlah gol
+          $poinA = $a->getTotalGoalWithOpponent($b);
+          $poinB = $b->getTotalGoalWithOpponent($a);
+
+          return $poinB - $poinA;
+      });
+
+      return $daftarTim;
   }
 
   public function getPeringkatKlasemen()

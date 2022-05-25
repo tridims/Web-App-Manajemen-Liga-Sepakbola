@@ -4,6 +4,7 @@ namespace Tridi\ManajemenLiga\Controller;
 
 use Tridi\ManajemenLiga\App\View;
 use Tridi\ManajemenLiga\Repository\PertandinganRepository;
+use Tridi\ManajemenLiga\Repository\TimRepository;
 use Tridi\ManajemenLiga\Service\PertandinganService;
 use Tridi\ManajemenLiga\Model\Pertandingan\updatePertandinganRequest;
 use Tridi\ManajemenLiga\Model\Pertandingan\deletePertandinganRequest;
@@ -15,8 +16,9 @@ class PertandinganController
 
   public function __construct()
   {
-    $repo = new PertandinganRepository();
-    $this->pertandinganService = new PertandinganService($repo);
+    $pertandinganRepository = new PertandinganRepository();
+    $timRepository = new TimRepository();
+    $this->pertandinganService = new PertandinganService($pertandinganRepository, $timRepository);
   }
 
   public function daftarPertandingan()
@@ -41,16 +43,16 @@ class PertandinganController
       $_POST['jumlahGolTim1'],
       $_POST['jumlahGolTim2'],
     );
-    $tim = $this->pertandinganService->editPertandingan($updateRequest);
-    // $this->daftarPertandingan();
-    header('Location: /pertandingan');
+    $tim = $this->pertandinganService->updatePertandingan($updateRequest);
+    try {
+        View::redirect('Location: /pertandingan');
+    } catch (\Exception $e) {}
   }
 
   public function deletePertandingan($id)
   {
     $deleteRequest = new deletePertandinganRequest($id);
     $this->pertandinganService->deletePertandingan($deleteRequest);
-    // $this->daftarPertandingan();
     header('Location: /pertandingan');
   }
 
@@ -68,8 +70,9 @@ class PertandinganController
       $_POST['jumlahGolTim1'],
       $_POST['jumlahGolTim2']
     );
-    $tim = $this->pertandinganService->registerPertandingan($createRequest);
-    // $this->daftarPertandingan();
-    header('Location: /pertandingan');
+    $this->pertandinganService->registerPertandingan($createRequest);
+    try {
+        header('Location: /pertandingan');
+    } catch (\Exception $e) {}
   }
 }

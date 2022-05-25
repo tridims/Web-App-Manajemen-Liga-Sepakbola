@@ -36,7 +36,6 @@ class TimRepository
     }
   }
 
-
   public function saveTim(TimSepakBola $tim): void
   {
     $params = [
@@ -88,5 +87,11 @@ class TimRepository
   {
     $sql = "DELETE FROM tim WHERE id = :id";
     Database::exec($sql, ['id' => $id]);
+  }
+
+  public function deleteAll()
+  {
+    $sql = "DELETE FROM tim";
+    Database::exec($sql);
   }
 }

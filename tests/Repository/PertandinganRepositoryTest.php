@@ -3,6 +3,7 @@
 namespace Tridi\ManajemenLiga\Repository;
 
 use PHPUnit\Framework\TestCase;
+use Tridi\ManajemenLiga\Domain\TimSepakBola;
 use Tridi\ManajemenLiga\Model\Pertandingan\createPertandinganRequest;
 use Tridi\ManajemenLiga\Model\Pertandingan\deletePertandinganRequest;
 use Tridi\ManajemenLiga\Model\Pertandingan\updatePertandinganRequest;
@@ -14,15 +15,20 @@ use function PHPUnit\Framework\assertEquals;
 class PertandinganRepositoryTest extends TestCase
 {
   private PertandinganRepository $pertandinganRepository;
-  private createPertandinganRequest $createPertandinganRequest;
-  private updatePertandinganRequest $updatePertandinganRequest;
-  private deletePertandinganRequest $deletePertandinganRequest;
+  private Pertandingan $pertandingan;
 
-  public function __construct()
+  public function setUp(): void
   {
-    parent::__construct();
     $this->pertandinganRepository = new PertandinganRepository();
-    $this->createPertandinganRequest = new createPertandinganRequest(1, 2, "2020-01-01", 0, 0);
+
+    $this->pertandingan = new Pertandingan(
+        null,
+        new TimSepakBola(1, "random", "random", "random", null, "random", "random", "random"),
+        new TimSepakBola(2, "random", "random", "random", null, "random", "random", "random"),
+        "2077-01-01",
+        rand(0, 100),
+        rand(0, 100)
+    );
   }
 
   public function testGetPertandinganByTimId()
@@ -72,20 +78,21 @@ class PertandinganRepositoryTest extends TestCase
     $this->pertandinganRepository->findById(-10);
   }
 
-  public function testSavePertandingan()
+  public function testSavePertandingan(): Pertandingan
   {
-    $this->pertandinganRepository->savePertandingan($this->createPertandinganRequest);
+    $this->pertandinganRepository->savePertandingan($this->pertandingan);
+
     $stmt = Database::query("select * from pertandingan where id_pertandingan=(SELECT LAST_INSERT_ID());");
 
     # get the id from the result of those queries
     $id = $stmt->fetch()['id_pertandingan'];
 
     $insertedPertandingan = $this->pertandinganRepository->findById($id);
-    $this->assertEquals($this->createPertandinganRequest->idTim1, $insertedPertandingan->tim1->id);
-    $this->assertEquals($this->createPertandinganRequest->idTim2, $insertedPertandingan->tim2->id);
-    $this->assertEquals($this->createPertandinganRequest->jadwalMain, $insertedPertandingan->jadwalMain);
-    $this->assertEquals($this->createPertandinganRequest->jumlahGolTim1, $insertedPertandingan->jumlahGolTim1);
-    $this->assertEquals($this->createPertandinganRequest->jumlahGolTim2, $insertedPertandingan->jumlahGolTim2);
+    $this->assertEquals($this->pertandingan->tim1->id, $insertedPertandingan->tim1->id);
+    $this->assertEquals($this->pertandingan->tim2->id, $insertedPertandingan->tim2->id);
+    $this->assertEquals($this->pertandingan->jadwalMain, $insertedPertandingan->jadwalMain);
+    $this->assertEquals($this->pertandingan->jumlahGolTim1, $insertedPertandingan->jumlahGolTim1);
+    $this->assertEquals($this->pertandingan->jumlahGolTim2, $insertedPertandingan->jumlahGolTim2);
 
     return $insertedPertandingan;
   }
@@ -95,25 +102,19 @@ class PertandinganRepositoryTest extends TestCase
    */
   public function testUpdatePertandingan(Pertandingan $insertedPertandingan)
   {
-    $this->updatePertandinganRequest = new updatePertandinganRequest(
-      $insertedPertandingan->id,
-      $insertedPertandingan->tim1->id,
-      $insertedPertandingan->tim2->id,
-      $insertedPertandingan->jadwalMain,
-      rand(0, 100),
-      rand(0, 100)
-    );
+    $insertedPertandingan->jumlahGolTim1 = rand(0, 100);
+    $insertedPertandingan->jumlahGolTim2 = rand(0, 100);
 
-    $this->pertandinganRepository->updatePertandingan($this->updatePertandinganRequest);
+    $this->pertandinganRepository->updatePertandingan($insertedPertandingan);
 
-    $insertedPertandingan = $this->pertandinganRepository->findById($insertedPertandingan->id);
+    $updatedPertandingan = $this->pertandinganRepository->findById($insertedPertandingan->id);
 
-    $this->assertEquals($this->updatePertandinganRequest->jumlahGolTim1, $insertedPertandingan->jumlahGolTim1);
-    $this->assertEquals($this->updatePertandinganRequest->jumlahGolTim2, $insertedPertandingan->jumlahGolTim2);
-    $this->assertEquals($this->updatePertandinganRequest->idTim1, $insertedPertandingan->tim1->id);
-    $this->assertEquals($this->updatePertandinganRequest->idTim2, $insertedPertandingan->tim2->id);
-    $this->assertEquals($this->updatePertandinganRequest->jadwalMain, $insertedPertandingan->jadwalMain);
-    $this->assertEquals($this->updatePertandinganRequest->id, $insertedPertandingan->id);
+    $this->assertEquals($updatedPertandingan->jumlahGolTim1, $insertedPertandingan->jumlahGolTim1);
+    $this->assertEquals($updatedPertandingan->jumlahGolTim2, $insertedPertandingan->jumlahGolTim2);
+    $this->assertEquals($updatedPertandingan->tim1->id, $insertedPertandingan->tim1->id);
+    $this->assertEquals($updatedPertandingan->tim2->id, $insertedPertandingan->tim2->id);
+    $this->assertEquals($updatedPertandingan->jadwalMain, $insertedPertandingan->jadwalMain);
+    $this->assertEquals($updatedPertandingan->id, $insertedPertandingan->id);
 
     return $insertedPertandingan;
   }
@@ -126,8 +127,7 @@ class PertandinganRepositoryTest extends TestCase
     $this->expectException(\Exception::class);
     $this->expectExceptionMessage("Pertandingan tidak ditemukan");
 
-    $this->deletePertandinganRequest = new deletePertandinganRequest($insertedPertandingan->id);
-    $this->pertandinganRepository->deletePertandingan($this->deletePertandinganRequest);
+    $this->pertandinganRepository->deletePertandingan($insertedPertandingan);
 
     $this->pertandinganRepository->findById($insertedPertandingan->id);
   }
